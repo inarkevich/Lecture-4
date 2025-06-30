@@ -84,6 +84,13 @@ public:
     Triangle(a, b, c, A,B,90){
         this->name = "Прямоугольный Треугольник";
     }
+    void checkCorrect() override{
+        int angleSum = A+B;
+        if(angleSum==90){
+            std::cout<<"Правильная"<<std::endl;
+        }
+        else{std::cout<<"Неправильная"<<std::endl;}
+    }
 };
 
 class IsosTriangle:public Triangle{
@@ -91,6 +98,13 @@ public:
     IsosTriangle(int a, int b, int A, int B):
     Triangle(a,b,a,  A, B, A){
     this->name = "Равнобедренный Треугольник";
+    }
+    void checkCorrect() override{
+        int angleSum = A+B+A;
+        if(angleSum==180){
+            std::cout<<"Правильная"<<std::endl;
+        }
+        else{std::cout<<"Неправильная"<<std::endl;}
     }
 }; 
 
@@ -108,6 +122,13 @@ public:
     Quadril(a,b,a,b, A, B,A,B){
     this->name = "Параллелограмм";
     };
+    void checkCorrect() override{
+        int angleSum = A+B+A+B;
+        if(angleSum==360){
+            std::cout<<"Правильная"<<std::endl;
+        }
+        else{std::cout<<"Неправильная"<<std::endl;}
+    }
 };
 
 class Rectangle: public Parallel{
@@ -121,6 +142,13 @@ class Rhombus:public Parallel{
 public:
     Rhombus(int a, int A, int B):Parallel(a,a,A,B){
     this->name = "Ромб";
+    }
+    void checkCorrect() override{
+        int angleSum = A+B+A+B;
+        if(angleSum==360){
+            std::cout<<"Правильная"<<std::endl;
+        }
+        else{std::cout<<"Неправильная"<<std::endl;}
     }
 };
 
