@@ -7,7 +7,7 @@ protected:
 public:
     virtual void getDetails(){};// Здесь 0 убран, иначе не удастся создать объект класса "Фигура"
     virtual void getName(){ std::cout<< name <<": " <<std::endl;}; 
-    virtual void checkCorrect(){std::cout<<"Правильная"<<std::endl;}; 
+    virtual bool checkCorrect(){return true;}; 
     virtual void getSize(){ std::cout<<"Количество сторон: " <<sides<<std::endl;}; 
 
 };
@@ -30,12 +30,10 @@ public:
         this->name = "Треугольник";
         this->sides = 3;
     }
-    void checkCorrect() override{
-        int angleSum = A+B+C;
-        if(angleSum==180){
-            std::cout<<"Правильная"<<std::endl;
-        }
-        else{std::cout<<"Неправильная"<<std::endl;}
+    bool checkCorrect() override{
+        bool angleSum = (A+B+C==180); //проверяем что все углы = 180 градусам
+        bool sides = (a+b>c)&&(b+c>a)&&(a+c>b); // проверяем условие неравенства сторон треугольника
+        return angleSum && sides;
     }
     void getDetails()override{
         std::cout<<"Стороны: a="<<a<<" b="<<b<<" c="<<c<<std::endl;
@@ -65,12 +63,9 @@ public:
         this->name = "Четыреухгольник";
         this->sides = 4;
     }
-    void checkCorrect() override{
-        int angleSum = A+B+C+D;
-        if(angleSum==360){
-            std::cout<<"Правильная"<<std::endl;
-        }
-        else{std::cout<<"Неправильная"<<std::endl;}
+        bool checkCorrect() override{
+        bool angleSum = (A+B+C+D==360); //проверяем что все углы = 360 градусам
+        return angleSum;
     }
     void getDetails() override{
         std::cout<<"Стороны: a="<<a<<" b="<<b<<" c="<<c<<" d="<<d<<std::endl;
@@ -84,12 +79,10 @@ public:
     Triangle(a, b, c, A,B,90){
         this->name = "Прямоугольный Треугольник";
     }
-    void checkCorrect() override{
-        int angleSum = A+B;
-        if(angleSum==90){
-            std::cout<<"Правильная"<<std::endl;
-        }
-        else{std::cout<<"Неправильная"<<std::endl;}
+    bool checkCorrect() override{
+        bool angleSum = (A==90||B==90||C==90)&&(A+B+C==180); //проверяем что все углы = 180 градусам и что хотя бы один равен 90
+        bool sides = (a+b>c)&&(b+c>a)&&(a+c>b); // проверяем условие неравенства сторон треугольника
+        return angleSum && sides;   
     }
 };
 
@@ -99,12 +92,10 @@ public:
     Triangle(a,b,a,  A, B, A){
     this->name = "Равнобедренный Треугольник";
     }
-    void checkCorrect() override{
-        int angleSum = A+B+A;
-        if(angleSum==180){
-            std::cout<<"Правильная"<<std::endl;
-        }
-        else{std::cout<<"Неправильная"<<std::endl;}
+    bool checkCorrect() override{
+        bool angleSum = (A==B||B==C||C==A)&&(A+B+C==180); //проверяем что все углы = 180 градусамб и что хотя бы два попарно равны
+        bool sides = (a==b||b==c||c==a)&&(a+b>c)&&(b+c>a)&&(a+c>b); // проверяем условие неравенства сторон треугольника и что хотя бы две попарно равны
+        return angleSum && sides;
     }
 }; 
 
@@ -114,6 +105,11 @@ public:
     Triangle(a, a, a, 60,60,60){
     this->name = "Равносторонний Треугольник";
     }
+    bool checkCorrect() override{
+        bool angleSum = (A==60 && B==60 && C==60); //проверяем что каждый угол = 60 градусам
+        bool sides = (a==b==c)&&(a+b>c)&&(b+c>a)&&(a+c>b); // проверяем условие неравенства сторон треугольника и что стороны равны
+        return angleSum && sides;
+    }
 };
 
 class Parallel : public Quadril{
@@ -122,12 +118,10 @@ public:
     Quadril(a,b,a,b, A, B,A,B){
     this->name = "Параллелограмм";
     };
-    void checkCorrect() override{
-        int angleSum = A+B+A+B;
-        if(angleSum==360){
-            std::cout<<"Правильная"<<std::endl;
-        }
-        else{std::cout<<"Неправильная"<<std::endl;}
+    bool checkCorrect() override{
+        bool angleSum = (A+B+C+D==360)&&(A==C&&B==D); //проверяем что все углы = 360 градусам и что углы попарно равны
+        bool sides = (a==c && b==d); // проверяем что стороны попарно равны;
+        return angleSum && sides;
     }
 };
 
@@ -136,6 +130,11 @@ public:
     Rectangle (int a, int b):Parallel(a, b, 90,90){
     this->name = "Прямоугольник";
     }
+    bool checkCorrect() override{
+        bool angleSum = (A==90&&B==90&&C==90&&D==90); //проверяем что каждый угол = 90
+        bool sides = (a==c && b==d); // проверяем что стороны попарно равны;
+        return angleSum && sides;
+    }
 };
 
 class Rhombus:public Parallel{
@@ -143,12 +142,10 @@ public:
     Rhombus(int a, int A, int B):Parallel(a,a,A,B){
     this->name = "Ромб";
     }
-    void checkCorrect() override{
-        int angleSum = A+B+A+B;
-        if(angleSum==360){
-            std::cout<<"Правильная"<<std::endl;
-        }
-        else{std::cout<<"Неправильная"<<std::endl;}
+    bool checkCorrect() override{
+        bool angleSum = (A+B+C+D==360)&&(A==C&&B==D); //проверяем что все углы = 360 и углы попарно равны
+        bool sides = (a==c==b==d); // проверяем что все стороны равны;
+        return angleSum && sides;
     }
 };
 
@@ -157,11 +154,20 @@ public:
     Square(int a):Rectangle(a,a){
     this->name = "Квадрат";
     }
+     bool checkCorrect() override{
+        bool angleSum = (A==90&&B==90&&C==90&&D==90); //проверяем что каждый угол = 90
+        bool sides = (a==c==b==d); // проверяем что все стороны равны;
+        return angleSum && sides;
+    }
 };
 
 void print_info(Figure* anyFigure){
     anyFigure->getName();
-    anyFigure->checkCorrect();
+    if(anyFigure->checkCorrect()){
+        std::cout<<"Правильная"<<std::endl;
+    }else{
+        std::cout<<"Неправильная"<<std::endl;
+    }
     anyFigure->getSize();
     anyFigure->getDetails();
 };
